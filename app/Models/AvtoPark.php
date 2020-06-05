@@ -11,14 +11,21 @@ class AvtoPark extends Model
     
     protected $fillable 
         = [
+            'id',
             'title',
             'address',
             'schedule',
-            'avto_id'
+     
+         
+            
         ];
     
-        // public function parks()
-        // {
-        //     return $this->hasMany('App\Models\AvtoCars');
-        // }
+        public function cars()
+    {
+     
+       
+        return $this->belongsToMany('App\Models\AvtoCars');
+        
+    }
+  
 }

@@ -40,13 +40,37 @@
                 <div class="col-md-12">
                     @include('avto.admin.parks.includes.item_edit_main_col')     
                 </div>
-                <div class="col-md-3">
+                <hr>
+                <div class="col-md-12">
+                    @include('avto.admin.parks.includes.item_edit_add_car')     
+                </div>
+                <hr>
+                <div class="col-md-12">
                     @include('avto.admin.parks.includes.item_edit_add_col')
                 </div>
             </div>
-        
-        
     </div>
-</form>    
+</form> 
+
+@if( $item->exists )
+            <br>
+            <form method="POST" action="{{ route('avto.admin.parks.destroy', $item->id)}}">
+                @method('DELETE')
+                @csrf
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card card-block">
+                            <div class="card-body ml-avto">
+                                <button type="submit" class="btn btn-link"> Удалить </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </form>
+@endif
+
+
+</div>
 
 @endsection

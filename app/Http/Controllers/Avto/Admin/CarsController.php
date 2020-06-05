@@ -15,7 +15,7 @@ class CarsController extends BaseController
      */
     public function index()
     {
-        $paginator = AvtoCars::paginate(5);
+        $paginator = AvtoCars::paginate(20);
       
         return view('avto.admin.cars.index',compact('paginator'));
     }
@@ -27,8 +27,15 @@ class CarsController extends BaseController
      */
     public function create()
     {
+        // $name = AvtoCars::carsNames();
+
+        // foreach ($name as $value){
+        //     echo $value->name_driver;
+        //     // dd(AvtoCars::carsNames());
+        // }
+        
         $item = new AvtoCars();
-        $parkList = AvtoCars::all();
+        $carList = AvtoCars::all();
 
         return view('avto.admin.cars.edit',
         compact('item','carsList'));
@@ -44,6 +51,7 @@ class CarsController extends BaseController
     {
         $data = $request->input();
         $item = (new AvtoCars())->create($data);
+        
 
         if ($item) {
             return redirect()
@@ -93,7 +101,7 @@ class CarsController extends BaseController
     {
          //Валидация AvtoParks
          $rules = [
-            'name' => 'required',
+            'number' => 'required',
             'name_driver' => 'required',
           
         ];
@@ -130,6 +138,17 @@ class CarsController extends BaseController
      */
     public function destroy($id)
     {
-        dd(__METHOD__);
+        $item = AvtoCars::find($id);
+        $result = AvtoCars::find($id)->delete();
+
+        if ($result) {
+            return redirect()
+                ->route('avto.admin.cars.index',$item->id);
+                
+        }else {
+            return back()
+            ->withErrors(['msg' => 'Ошибка ']);
+            
+        }
     }
 }

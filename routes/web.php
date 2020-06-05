@@ -34,7 +34,7 @@ $groupData = [
 
 Route::group($groupData,function(){
     //AvtoParks 
-    $methods = ['index','edit','update','create','store'];
+    $methods = ['index','edit','update','create','store','destroy'];
     Route::resource('parks','ParksController')
         ->only($methods)
         ->names('avto.admin.parks');
@@ -45,6 +45,12 @@ Route::group($groupData,function(){
         ->names('avto.admin.cars');
 
 });
+
+Route::get('/test', function () {
+    return view('test');
+});
+
+
 
 // // Админка Машин
 // $groupData = [

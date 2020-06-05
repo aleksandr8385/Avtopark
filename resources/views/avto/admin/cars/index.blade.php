@@ -15,9 +15,9 @@
                                 <th>#</th>
                                 <th>Номер</th>
                                 <th>Имя Водителя</th>
-                                <th>Park_id</th>
-                                <th>User_id</th>
+                                <th>Автопарк</th>
                                 
+                                                      
                                
                             </tr>
                             </thead>
@@ -36,18 +36,13 @@
                                             {{ $item->name_driver }}
                                         </a>
                                     </td>
-                                  
                                     <td>
-                                        <a href="{{ route('avto.admin.cars.edit',$item->id)}}">
-                                            {{ $item->park_id }}
-                                        </a>
+                                        
+                                            {{ $item->parks()->pluck('title')->implode(' ,') }}
+                                       
                                     </td>
-                                    <td>
-                                        <a href="{{ route('avto.admin.cars.edit',$item->id)}}">
-                                            {{ $item->user_id }}
-                                        </a>
-                                    </td>
-                                 
+                                   
+                                                    
                                     
                                 </tr>
                             @endforeach

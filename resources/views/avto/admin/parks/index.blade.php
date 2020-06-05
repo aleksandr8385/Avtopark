@@ -16,7 +16,8 @@
                                 <th>Название</th>
                                 <th>Адрес</th>
                                 <th>График</th>
-                                <th>Машина</th>
+                                <th>Имя водителя</th>
+                                <th>Номер машины</th>
                                
                             </tr>
                             </thead>
@@ -41,9 +42,20 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('avto.admin.parks.edit',$item->id)}}">
-                                            {{ $item->avto_id }}
-                                        </a>
+                                        @foreach ($item->cars()->pluck('name_driver') as $name)
+                                            <a href="{{ route('avto.admin.parks.edit',$item->id)}}">
+                                                {{ $name }}
+                                            </a>    
+                                            <hr>
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach ($item->cars()->pluck('number') as $number)
+                                            <a href="{{ route('avto.admin.parks.edit',$item->id)}}">
+                                                {{ $number }}
+                                            </a>    
+                                            <hr>
+                                        @endforeach
                                     </td>
                                  
                                     

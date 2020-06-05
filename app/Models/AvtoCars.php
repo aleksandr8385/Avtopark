@@ -9,19 +9,25 @@ class AvtoCars extends Model
 {
     protected $fillable 
         = [
+            'id',
             'number',
             'name_driver',
-            'park_id',
-            'user_id'
+                   
         ];
 
     public function parks()
     {
-        return $this->belongsTo(AvtoPark::class);
+    
+        return $this->belongsToMany('App\Models\AvtoPark');
+            
     }
 
-    public function users()
+    public static function carsNames()
     {
-        return $this->belongsTo(User::class);
+     
+        return AvtoCars::all();
+        
     }
+
+  
 }

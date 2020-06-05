@@ -5,7 +5,7 @@
                 <div class="cart-title"></div>
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#maindata" role="tab">Основные данные</a>
+                            <a class="nav" data-toggle="tab" href="#maindata" role="tab">Автопарк</a>
                         </li>
                     </ul>
                     <br>
@@ -35,20 +35,11 @@
                                         required>
                                 
                             </div>
-                            <div class="form-group">
-                                <label for="avto_id">Машина</label>
-                                <input name="avto_id" value="{{ $item->avto_id}}"
-                                        id="avto_id"
-                                        class="form-control"
-                                        required>
-                                
-                            </div>
+
                         </div>
-                
-                </div>
-                </div>
+                    </div>
             </div>
         </div>
     </div>
-
 </div>
+

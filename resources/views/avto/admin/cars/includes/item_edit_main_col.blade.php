@@ -5,7 +5,7 @@
                 <div class="cart-title"></div>
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#maindata" role="tab">Основные данные</a>
+                            <a class="nav" data-toggle="tab" href="#maindata" role="tab">Машины</a>
                         </li>
                     </ul>
                     <br>
@@ -27,22 +27,8 @@
                                         required>
                                 
                             </div>
-                            <div class="form-group">
-                                <label for="user_id">Пользователь</label>
-                                <input name="user_id" value="{{ $item->user_id}}"
-                                        id="user_id"
-                                        class="form-control"
-                                        required>
-                                
-                            </div>
-                            <div class="form-group">
-                                <label for="park_id">Автопарк</label>
-                                <input name="park_id" value="{{ $item->park_id}}"
-                                        id="park_id"
-                                        class="form-control"
-                                        required>
-                                
-                            </div>
+                            
+                            
                         </div>
                 
                      </div>

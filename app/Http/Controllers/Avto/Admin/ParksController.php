@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Avto\Admin;
 // use App\Http\Controllers\Controller;
 
 use App\Http\Requests\AvtoParksUpdateRequest;
+use App\Models\AvtoCars;
 use App\Models\AvtoPark;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class ParksController extends BaseController
@@ -18,8 +20,8 @@ class ParksController extends BaseController
      */
     public function index()
     {
-        $paginator = AvtoPark::paginate(25);
-    //    dd($paginator);
+        $paginator = AvtoPark::paginate(250);
+        // dd($paginator);
         return view('avto.admin.parks.index',compact('paginator'));
     }
 
@@ -32,9 +34,14 @@ class ParksController extends BaseController
     {
         $item = new AvtoPark();
         $parkList = AvtoPark::all();
+        $car = AvtoCars::pluck('number','name_driver');
+        $carName = AvtoCars::pluck('name_driver');
+       
+
 
         return view('avto.admin.parks.edit',
-        compact('item','parkList'));
+        compact('item','parkList','car','carName'));
+        
     }
 
     /**
@@ -46,30 +53,51 @@ class ParksController extends BaseController
     public function store(Request $request)
     {
         $data = $request->input();
-        // if (empty($data['title'])){
-        //         $data['title'] = str_slug($data['title']);
-        // }
-
-        // Создаст объект но не добавит в БД
-        // $item = new AvtoPark($data);
-        // dd($item);
-        // $item->save();
-
-        // Создаст объект  добавит в БД
         $item = (new AvtoPark())->create($data);
 
-        if ($item) {
+        
+        if ( $item && $data['car_number'] && $data['driver_name'] ){
+            $park_id = AvtoPark::where('title', $data['title'])
+                                ->first()
+                                ->id;
+           
+                for ( $i = 0; $i < count($data['car_number']); $i++) {
+                    
+                    $find_avto = AvtoCars::where('number', $data['car_number'][$i])
+                                        ->first();
+                                    
+                    if ($find_avto) {
+                        $avto_id = $find_avto->id;
+                        //Добавить $park_id"," $avto_id" в таблицу;
+                        DB::insert('insert into avto_cars_avto_park (avto_park_id, avto_cars_id) values (?, ?)', [$park_id, $avto_id]);
+                    }else{
+                        DB::insert('insert into avto_cars (number, name_driver,created_at,updated_at) values (?, ?, ?, ?)',
+                        [
+                            $data['car_number'][$i],
+                            $data['driver_name'][$i],
+                            date("Y-m-d H:i:s"),
+                            date("Y-m-d H:i:s")
+                        ]);
+                        $avto_id = AvtoCars::where('number', $data['car_number'][$i])
+                        ->first()
+                        ->id;
+                        DB::insert('insert into avto_cars_avto_park (avto_park_id, avto_cars_id) values (?, ?)', [$park_id, $avto_id]);
+                        
+                    }
+                }
+       
+
             return redirect()
-                ->route('avto.admin.parks.edit',$item->id)
-                ->with(['success' => 'Успешна сохранено']);
+            ->route('avto.admin.parks.index')
+            ->with(['success' => 'Успешна сохранено']);
         }else {
             return back()
             ->withErrors(['msg' => 'Ошибка сохранения'])
             ->withInput();
         }
+          
     }
-
-    /**
+     /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -90,9 +118,12 @@ class ParksController extends BaseController
     {
         $item = AvtoPark::findOrFail($id);
         $parkList = AvtoPark::all();
+        $carName = AvtoCars::pluck('name_driver');
+        $car = AvtoCars::pluck('number','name_driver');
+        // dd($parkList);
 
         return view('avto.admin.parks.edit',
-        compact('item','$parkList'));
+        compact('item','parkList','carName','car'));
 
     }
 
@@ -109,7 +140,8 @@ class ParksController extends BaseController
         $rules = [
             'title' => 'required',
             'address' => 'required',
-            'schedule' => 'required'
+            'schedule' => 'required',
+            
         ];
         
         $validatedData = $this->validate($request,$rules);
@@ -122,7 +154,7 @@ class ParksController extends BaseController
         }
 
         $validatedData = $request->all();
-      
+        // dd( $item);
         $result = $item->update($validatedData);
        
         if ($result) {
@@ -145,6 +177,17 @@ class ParksController extends BaseController
      */
     public function destroy($id)
     {
-         dd(__METHOD__);
+        $item = AvtoPark::find($id);
+        $result = AvtoPark::find($id)->delete();
+
+        if ($result) {
+            return redirect()
+                ->route('avto.admin.parks.index',$item->id);
+                
+        }else {
+            return back()
+            ->withErrors(['msg' => 'Ошибка ']);
+            
+        }
     }
 }
